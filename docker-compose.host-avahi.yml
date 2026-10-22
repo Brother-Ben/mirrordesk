@@ -1,0 +1,11 @@
+# Optional: use the HOST's Avahi daemon instead of a private one in the container.
+# Use when the host already runs avahi-daemon (two mDNS responders on one host
+# can confuse discovery):
+#   docker compose -f docker-compose.yml -f docker-compose.host-avahi.yml up -d --build
+services:
+  mirrordesk:
+    environment:
+      MIRRORDESK_AVAHI: "host"
+    volumes:
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+      - /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket

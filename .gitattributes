@@ -1,0 +1,21 @@
+* text=auto
+
+# Run on Linux and macOS (sh breaks on CRLF line ends).
+*.sh text eol=lf
+*.command text eol=lf
+Dockerfile text eol=lf
+.dockerignore text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Run on Windows.
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+*.tar.gz binary
+*.ico binary
+*.png binary
+*.bin binary
+third_party/scrcpy/scrcpy-server-* binary
+tests/fixtures/quicktime/* binary
+tests/fixtures/quicktime/*.txt text

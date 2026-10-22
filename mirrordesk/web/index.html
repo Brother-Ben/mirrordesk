@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d0f12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>MirrorDesk</title>
+<link rel="icon" href="/app/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="/app/manifest.webmanifest">
+<link rel="stylesheet" href="/app/app.css">
+<script src="/app/theme.js"></script>
+</head>
+<body>
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-mirror" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8.5 20h7M12 16.5V20"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 6.5h9M17 6.5h3M4 12h3M11 12h9M4 17.5h11M19 17.5h1"/><circle cx="15" cy="6.5" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17.5" r="2"/></symbol>
+  <symbol id="i-dev" viewBox="0 0 24 24"><path d="M8.5 8 4 12l4.5 4M15.5 8 20 12l-4.5 4M13.5 5l-3 14"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.6A8.2 8.2 0 1 1 9.4 4a6.6 6.6 0 0 0 10.6 10.6z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M8 5.5v13l10.5-6.5z"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect fill="currentColor" stroke="none" x="6.5" y="6.5" width="11" height="11" rx="1.5"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5l4.5 4v-13l-4.5 4z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.3a8 8 0 0 1 0 11.4"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5l4.5 4v-13l-4.5 4z"/><path d="m16 9.5 5 5M21 9.5l-5 5"/></symbol>
+  <symbol id="i-full" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></symbol>
+  <symbol id="i-pip" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><rect x="12" y="11" width="6.5" height="5.5" rx="1"/></symbol>
+  <symbol id="i-stats" viewBox="0 0 24 24"><path d="M5 20v-8M12 20V5M19 20v-5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19.5 11A7.5 7.5 0 0 0 6.2 6.6L4.5 8.5M4.5 4.5v4h4M4.5 13a7.5 7.5 0 0 0 13.3 4.4l1.7-1.9M19.5 19.5v-4h-4"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 2.5v4M15 2.5v4"/><path d="M6.5 6.5h11V11a5.5 5.5 0 0 1-11 0z"/><path d="M12 16.5v5"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2.5 8.8a14 14 0 0 1 19 0M5.5 12.2a9.5 9.5 0 0 1 13 0M8.7 15.6a5 5 0 0 1 6.6 0"/><path d="M12 19.2h.01"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v8.5"/><path d="M6.4 6.6a8 8 0 1 0 11.2 0"/></symbol>
+  <symbol id="i-android" viewBox="0 0 24 24"><path d="M5 17V11a7 7 0 0 1 14 0v6z"/><path d="M8.5 7 6.8 4.5M15.5 7l1.7-2.5"/><path d="M9.5 11.5h.01M14.5 11.5h.01"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15.5 5.5 9 12l6.5 6.5"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.5"/></symbol>
+  <symbol id="i-recents" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M15.5 5.6a3.2 3.2 0 0 1 0 5.8M17.5 14.2a5.5 5.5 0 0 1 3 4.8"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 19.5a7 7 0 0 1 14 0"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5.5c0 4.2 2.9 7.8 7 9.5 4.1-1.7 7-5.3 7-9.5V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 4 2.5 20h19z"/><path d="M12 10v4.5M12 17.5h.01"/></symbol>
+</svg>
+
+<div class="app" id="app">
+  <nav class="nav" aria-label="Main">
+    <div class="nav-brand"><img src="/app/icon.svg" alt="" width="28" height="28"><span>MirrorDesk</span></div>
+    <button class="nav-item" id="nav-mirror" data-page="mirror" aria-current="page"><svg><use href="#i-mirror"/></svg><span>Screen</span><i class="live-dot" id="nav-live" hidden></i></button>
+    <button class="nav-item owner-only" id="nav-connect" data-page="connect"><svg><use href="#i-phone"/></svg><span>Devices</span></button>
+    <button class="nav-item owner-only" id="nav-share" data-page="share"><svg><use href="#i-users"/></svg><span>Viewers</span></button>
+    <button class="nav-item owner-only" id="nav-settings" data-page="settings"><svg><use href="#i-settings"/></svg><span>Settings</span></button>
+    <button class="nav-item viewer-only" id="nav-owner" title="Sign in with the owner code to change settings"><svg><use href="#i-shield"/></svg><span>Owner sign-in</span></button>
+    <!-- Developer and test tools: remove this group (and #page-developer) for the commercial release. -->
+    <div class="nav-group owner-only" aria-hidden="true">Testing</div>
+    <button class="nav-item owner-only nav-dev" id="nav-developer" data-page="developer"><svg><use href="#i-dev"/></svg><span>Developer</span></button>
+    <div class="nav-bottom">
+      <button class="nav-item quit owner-only" id="btn-quit" title="Quit MirrorDesk" hidden><svg><use href="#i-power"/></svg><span>Quit</span></button>
+      <div class="nav-footer" id="nav-version"></div>
+    </div>
+  </nav>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-brand"><img src="/app/icon.svg" alt="" width="24" height="24"></div>
+      <h1 class="topbar-title" id="view-title">Screen</h1>
+      <div class="status-row" aria-live="polite">
+        <span class="status" id="chip-phone" data-tone="muted"><i></i><span class="label">Device</span><span class="value">…</span></span>
+        <span class="status owner-only" id="chip-viewers" data-tone="muted"><svg><use href="#i-users"/></svg><span class="value">…</span><span class="short" id="viewers-short">0</span></span>
+        <span class="status owner-only" id="chip-receiver" data-tone="muted"><i></i><span class="label">AirPlay</span><span class="value">…</span></span>
+      </div>
+      <span class="topbar-divider" aria-hidden="true"></span>
+      <button class="icon-btn" id="btn-theme" title="Switch between light and dark" aria-label="Switch between light and dark"><svg><use href="#i-moon"/></svg></button>
+    </header>
+
+    <div class="workspace" id="workspace" data-panel="none">
+      <section class="stage" id="stage" aria-label="Mirrored screen">
+        <video id="video" playsinline autoplay muted></video>
+        <div class="overlay idle" id="idle">
+          <div class="idle-inner">
+            <div class="idle-head">
+              <div class="idle-icon" aria-hidden="true"><svg><use href="#i-phone"/></svg></div>
+              <h2 id="idle-title">Ready to mirror</h2>
+              <p class="idle-sub" id="idle-sub">Connect a device in one of these ways.</p>
+            </div>
+            <div class="ways owner-only" id="idle-steps">
+              <article class="way" id="way-airplay">
+                <header class="way-head">
+                  <span class="way-icon"><svg><use href="#i-wifi"/></svg></span>
+                  <div class="way-name"><h3>iPhone or iPad</h3><span>Wi-Fi</span></div>
+                  <span class="badge" id="way-airplay-dot" data-tone="muted">…</span>
+                </header>
+                <ol class="way-steps">
+                  <li>Open <b>Control Center</b>, tap <b>Screen Mirroring</b>.</li>
+                  <li>Choose <b id="idle-name">MirrorDesk Web</b>.</li>
+                  <li>Enter this code.</li>
+                </ol>
+                <div class="way-code">
+                  <div><span class="caption">Code</span><span class="code pin" id="idle-pin">····</span></div>
+                  <span class="caption">New code<br>every session</span>
+                </div>
+              </article>
+              <article class="way" id="way-usb">
+                <header class="way-head">
+                  <span class="way-icon"><svg><use href="#i-plug"/></svg></span>
+                  <div class="way-name"><h3>iPhone</h3><span>USB cable</span></div>
+                  <span class="badge" id="way-usb-dot" data-tone="muted">…</span>
+                </header>
+                <p id="idle-usb">Plug the iPhone into this computer and unlock it.</p>
+                <p class="caption">The first time, tap <b>Trust</b> on the iPhone and enter its passcode.</p>
+              </article>
+              <article class="way" id="way-android">
+                <header class="way-head">
+                  <span class="way-icon"><svg><use href="#i-android"/></svg></span>
+                  <div class="way-name"><h3>Android</h3><span>USB cable</span></div>
+                  <span class="badge" id="way-android-dot" data-tone="muted">…</span>
+                </header>
+                <p id="idle-android">Turn on USB debugging once, then plug the phone into this computer.</p>
+                <button class="link" id="way-android-help" type="button">How to turn on USB debugging</button>
+              </article>
+            </div>
+            <p class="hint" id="idle-hint">For Wi-Fi, the phone and this computer must be on the same network.</p>
+          </div>
+        </div>
+        <button class="play-prompt" id="tap" hidden><svg><use href="#i-play"/></svg><span>Play</span></button>
+        <div class="stats" id="stats" hidden></div>
+        <div class="controls" id="controls">
+          <button id="btn-disconnect" class="ctl danger owner-only" title="Stop mirroring this device"><svg><use href="#i-stop"/></svg><span>Disconnect</span></button>
+          <span class="ctl-divider owner-only" aria-hidden="true"></span>
+          <button id="btn-sound" class="ctl" title="Turn audio on"><svg><use href="#i-mute"/></svg><span>Audio off</span></button>
+          <span class="ctl-group" id="phone-keys" hidden>
+            <button class="ctl" data-key="back" title="Back (Esc)"><svg><use href="#i-back"/></svg><span>Back</span></button>
+            <button class="ctl" data-key="home" title="Home"><svg><use href="#i-home"/></svg><span>Home</span></button>
+            <button class="ctl" data-key="recents" title="Recent apps"><svg><use href="#i-recents"/></svg><span>Apps</span></button>
+          </span>
+          <label class="ctl-select"><span class="ctl-label">Quality</span>
+            <select id="mode" title="Video quality" aria-label="Video quality">
+              <option value="auto">Automatic</option>
+              <option value="passthrough" title="The device's own video. Until its next full picture, the current picture is shown re-encoded.">Original</option>
+              <option value="compat">Compatibility</option>
+            </select>
+          </label>
+          <button id="btn-stats" class="ctl" title="Show stream details"><svg><use href="#i-stats"/></svg><span>Details</span></button>
+          <button id="btn-pip" class="ctl" title="Picture in picture" hidden><svg><use href="#i-pip"/></svg><span>Pop out</span></button>
+          <button id="btn-full" class="ctl" title="Full screen"><svg><use href="#i-full"/></svg><span>Full screen</span></button>
+        </div>
+      </section>
+
+      <aside class="panel owner-only" id="panel" aria-labelledby="panel-title" hidden>
+        <header class="panel-head">
+          <h2 id="panel-title">Settings</h2>
+          <button class="icon-btn" id="btn-panel-close" title="Back to the screen" aria-label="Close"><svg><use href="#i-close"/></svg></button>
+        </header>
+        <div class="panel-body">
+
+          <!-- ============================================================ Devices -->
+          <section class="page" id="page-connect" data-title="Devices" hidden>
+            <div class="now" id="now-card" hidden>
+              <span class="now-icon"><svg><use href="#i-phone" id="now-icon"/></svg></span>
+              <div class="now-text"><b id="now-title">Device</b><span id="now-detail"></span></div>
+              <button class="btn danger" id="btn-now-disconnect">Disconnect</button>
+            </div>
+
+            <div class="segmented" role="tablist" aria-label="Device type">
+              <button role="tab" id="tab-iphone" aria-selected="true" aria-controls="phones-iphone">iPhone and iPad</button>
+              <button role="tab" id="tab-android" aria-selected="false" aria-controls="phones-android">Android</button>
+            </div>
+
+            <div class="tabpanel" id="phones-iphone" role="tabpanel" aria-labelledby="tab-iphone">
+              <section class="section">
+                <div class="section-head"><h3>Wi-Fi (AirPlay)</h3><span class="badge" id="rx-state">…</span></div>
+                <div class="list">
+                  <div class="row"><span class="row-label">Name on the device</span><b class="row-value" id="rx-name">…</b></div>
+                  <div class="row"><span class="row-label">Code</span><span class="row-value code-cell"><span class="code pin" id="rx-pin">····</span><button class="btn small" id="btn-pin">New code</button></span></div>
+                  <div class="row"><span class="row-label">Device</span><span class="row-value" id="rx-phone">…</span></div>
+                </div>
+                <p class="caption">The code stays the same while MirrorDesk runs, and devices that entered it can come back without it. MirrorDesk makes a new code and forgets every device when it starts again, when you choose New code, or after 4 hours with no device connected.</p>
+                <p class="caption" id="rx-message">Loading…</p>
+                <div class="actions">
+                  <button id="rx-start" class="btn">Start</button>
+                  <button id="rx-restart" class="btn">Restart</button>
+                  <button id="rx-stop" class="btn danger">Stop</button>
+                </div>
+                <p class="notice warn" id="rx-discovery" hidden></p>
+              </section>
+
+              <section class="section">
+                <div class="section-head"><h3>USB cable</h3><span class="badge" id="usb-state">…</span></div>
+                <p id="usb-message">Loading…</p>
+                <div class="list" id="usb-facts" hidden>
+                  <div class="row"><span class="row-label">Phone</span><span class="row-value" id="usb-device">–</span></div>
+                </div>
+                <div class="actions">
+                  <button id="btn-usb-driver" class="btn primary" hidden>Install cable driver</button>
+                  <button id="btn-usb-reconnect" class="btn"><svg><use href="#i-refresh"/></svg>Reconnect</button>
+                </div>
+                <p id="usb-driver-msg" class="caption" role="status" hidden></p>
+                <details class="help">
+                  <summary>How cable mirroring works</summary>
+                  <ol>
+                    <li>Plug the iPhone into this computer and unlock it. The first time, tap <b>Trust</b> and enter the passcode.</li>
+                    <li>The screen appears here within a few seconds. No Wi-Fi or internet is used.</li>
+                    <li>While mirroring by cable, the phone's status bar shows 9:41 and a full battery. This is normal.</li>
+                    <li>If the picture does not start, unplug the phone and plug it in again. If that does not help, restart the phone.</li>
+                  </ol>
+                  <p class="caption" id="usb-driver-help">Windows needs the cable driver (libusb-win32) for the phone. With the phone plugged in, click <b>Install cable driver</b> and allow the Windows prompt once. Afterwards iTunes and Apple Devices do not see this phone; <button class="link" id="btn-usb-restore" hidden>restore Apple's driver</button> to undo.</p>
+                </details>
+              </section>
+            </div>
+
+            <div class="tabpanel" id="phones-android" role="tabpanel" aria-labelledby="tab-android" hidden>
+              <section class="section" id="android-card">
+                <div class="section-head"><h3>USB cable</h3><span class="badge" id="android-state">…</span></div>
+                <p id="android-message">Loading…</p>
+                <div class="actions" id="android-install" hidden>
+                  <button id="btn-android-install" class="btn primary">Install Android tools</button>
+                  <span class="caption" id="android-install-msg">Google's adb, about 8 MB.</span>
+                </div>
+                <div class="list" id="android-facts" hidden>
+                  <div class="row"><span class="row-label">Phone</span><span class="row-value" id="android-device">–</span></div>
+                  <div class="row"><span class="row-label">Connection</span><span class="row-value" id="android-transport">–</span></div>
+                  <div class="row"><span class="row-label">Audio</span><span class="row-value" id="android-audio">–</span></div>
+                  <div class="row"><span class="row-label">Control</span><span class="row-value" id="android-control">–</span></div>
+                </div>
+                <label class="field" id="android-pick-row" hidden>Phone to mirror<select id="android-pick"></select></label>
+                <div class="actions">
+                  <button id="btn-android-reconnect" class="btn"><svg><use href="#i-refresh"/></svg>Reconnect</button>
+                  <button id="btn-android-disconnect" class="btn" hidden>End Wi-Fi connection</button>
+                </div>
+                <details class="help" id="android-usb-help" open>
+                  <summary>Turn on USB debugging (once per phone)</summary>
+                  <ol>
+                    <li>Settings → About phone → tap <b>Build number</b> seven times (on some phones it is under Software information).</li>
+                    <li>Settings → System → <b>Developer options</b> → turn on <b>USB debugging</b>.</li>
+                    <li>Plug the phone into this computer, unlock it and tap <b>Allow</b> (tick "Always allow from this computer").</li>
+                    <li>Xiaomi, Redmi, POCO: also turn on <b>USB debugging (Security settings)</b> to control the phone from here.</li>
+                  </ol>
+                  <p class="caption">Nothing is installed on the phone. Audio needs Android 11 or newer; on Android 11, unlock the phone before mirroring starts. Windows may need the phone maker's USB driver if the phone never shows "Allow USB debugging?".</p>
+                </details>
+              </section>
+
+              <details class="section collapsible" id="android-wifi">
+                <summary>Wi-Fi (Wireless debugging)</summary>
+                <p class="notice warn"><svg><use href="#i-warn"/></svg><span>Wireless debugging lets a paired computer control the phone over the network. Use the cable when you can, pair only on networks you trust, and turn Wireless debugging off on the phone when you are done.</span></p>
+                <ol class="steps">
+                  <li>Android 11 or newer: Settings → Developer options → <b>Wireless debugging</b> → turn it on.</li>
+                  <li>Tap <b>Pair device with QR code</b> and scan the code below, or tap <b>Pair device with pairing code</b> and enter what the phone shows here.</li>
+                </ol>
+                <div class="actions"><button id="btn-android-qr" class="btn">Show QR code</button></div>
+                <div class="qr" id="android-qr" hidden>
+                  <img id="android-qr-img" alt="QR code for pairing the phone" width="222" height="222">
+                  <p class="caption">Valid for 2 minutes. The phone and this computer must be on the same Wi-Fi.</p>
+                </div>
+                <form id="android-pair-form" class="pair-form" autocomplete="off">
+                  <label class="field">IP address<input name="host" inputmode="decimal" placeholder="192.168.1.23" required></label>
+                  <label class="field">Port<input name="port" inputmode="numeric" placeholder="37123" required></label>
+                  <label class="field">Pairing code<input name="code" inputmode="numeric" maxlength="6" placeholder="6 digits"></label>
+                  <div class="actions">
+                    <button type="submit" class="btn" value="pair">Pair</button>
+                    <button type="submit" class="btn" value="connect">Connect</button>
+                  </div>
+                  <p class="caption">Pair uses the address, port and code from "Pair device with pairing code". After pairing the phone usually connects by itself; if not, enter the address and port shown at the top of the Wireless debugging screen and choose Connect.</p>
+                </form>
+                <p id="android-pair-msg" class="caption" role="status"></p>
+              </details>
+            </div>
+          </section>
+
+          <!-- ============================================================ Viewers -->
+          <section class="page" id="page-share" data-title="Viewers" hidden>
+            <section class="section">
+              <div class="section-head stacked"><h3>Invite</h3><p>Viewers see and hear the phone. They can't change anything.</p></div>
+              <label class="field">Address<select id="invite-address"></select></label>
+              <div class="link-row">
+                <input id="invite-url" readonly aria-label="Invitation link">
+                <button class="btn primary" id="btn-invite-copy"><svg><use href="#i-copy"/></svg>Copy</button>
+              </div>
+              <label class="check"><input type="checkbox" id="invite-with-code" checked><span>Sign in with the link (it holds the viewer code)</span></label>
+              <div class="invite-card">
+                <div class="qr-box"><img id="invite-qr" alt="QR code of the invitation link" width="120" height="120"></div>
+                <div class="invite-code">
+                  <span class="caption">Viewer code</span>
+                  <b class="code" id="access-code">······</b>
+                  <button class="btn small" id="btn-code">New code</button>
+                </div>
+              </div>
+              <p class="caption" id="invite-hint"></p>
+            </section>
+
+            <section class="section">
+              <div class="section-head"><h3>Viewers</h3><span class="badge" id="watch-count">0</span></div>
+              <ul class="watchers" id="watchers"></ul>
+              <p class="caption">To sign everyone out, make a new viewer code.</p>
+            </section>
+
+            <details class="section collapsible" id="addresses-card">
+              <summary>All addresses</summary>
+              <div class="section-head"><p>Open one of these in a browser on the same network, on your Tailscale network, or on a device connected by USB.</p><button class="icon-btn" id="btn-net-refresh" title="Refresh" aria-label="Refresh addresses"><svg><use href="#i-refresh"/></svg></button></div>
+              <ul class="urls" id="urls"></ul>
+              <p class="caption">Ethernet, Wi-Fi and the local name work for devices on the same network. Tailscale works for devices on your Tailscale network. A VPN or remote-access address works only for devices connected through that service.</p>
+              <p class="caption" id="tailscale-line"></p>
+              <p class="caption" id="usb-line"></p>
+              <div class="table-wrap"><table class="table"><thead><tr><th>Type</th><th>Adapter</th><th>Address</th></tr></thead><tbody id="ifaces"></tbody></table></div>
+            </details>
+          </section>
+
+          <!-- ============================================================ Settings -->
+          <section class="page" id="page-settings" data-title="Settings" hidden>
+            <div class="tabs" role="tablist" aria-label="Settings sections">
+              <button role="tab" id="stab-general" data-tab="general" aria-selected="true" aria-controls="sset-general">General</button>
+              <button role="tab" id="stab-video" data-tab="video" aria-selected="false" aria-controls="sset-video">Video and audio</button>
+              <button role="tab" id="stab-phones" data-tab="phones" aria-selected="false" aria-controls="sset-phones">Devices</button>
+              <button role="tab" id="stab-access" data-tab="access" aria-selected="false" aria-controls="sset-access">Access</button>
+            </div>
+
+            <form id="settings-form">
+              <div class="settings-set" id="sset-general" role="tabpanel" aria-labelledby="stab-general">
+                <label class="setting stacked"><span class="setting-text"><span class="setting-name">Name shown on devices</span><small>Changes as soon as you save. A device that is mirroring then connects again.</small></span>
+                  <input name="receiver_name" maxlength="40" autocomplete="off" required></label>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Start Wi-Fi mirroring with MirrorDesk</span></span>
+                  <input type="checkbox" role="switch" class="switch" name="autostart_receiver"></label>
+                <label class="setting desktop-only" hidden><span class="setting-text"><span class="setting-name">Ask before quitting</span></span>
+                  <input type="checkbox" role="switch" class="switch" name="confirm_quit"></label>
+              </div>
+
+              <div class="settings-set" id="sset-video" role="tabpanel" aria-labelledby="stab-video" hidden>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Resolution</span><small>The phone fits its screen to this height.</small></span>
+                  <select name="resolution"></select></label>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Frame rate</span></span>
+                  <select name="fps"></select></label>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Video for viewers</span><small>Automatic sends the phone's own video when the browser can play it.</small></span>
+                  <select name="video_mode"></select></label>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Largest re-encoded picture</span><small>Lower means less work for this computer.</small></span>
+                  <select name="compat_max_height"></select></label>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Audio timing</span></span>
+                  <select name="av_sync"></select></label>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Play the phone's audio</span></span>
+                  <input type="checkbox" role="switch" class="switch" name="audio_enabled"></label>
+              </div>
+
+              <div class="settings-set" id="sset-phones" role="tabpanel" aria-labelledby="stab-phones" hidden>
+                <h3 class="set-heading">iPhone and iPad</h3>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Mirror an iPhone plugged in by USB cable</span></span>
+                  <input type="checkbox" role="switch" class="switch" name="usb_enabled"></label>
+                <h3 class="set-heading">Android</h3>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Mirror Android phones</span></span>
+                  <input type="checkbox" role="switch" class="switch" name="android_enabled"></label>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Picture size</span><small>Longest side of the phone's picture.</small></span>
+                  <select name="android_max_size"></select></label>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Picture quality</span></span>
+                  <select name="android_bit_rate"></select></label>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Frame rate</span></span>
+                  <select name="android_fps"></select></label>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Who can tap and type on the phone</span><small>With the mouse, touch screen and keyboard, on the picture.</small></span>
+                  <select name="android_control"></select></label>
+                <label class="setting"><span class="setting-text"><span class="setting-name">Play audio on phone and MirrorDesk</span><small>Android 13 or newer.</small></span>
+                  <input type="checkbox" role="switch" class="switch" name="android_audio_on_phone"></label>
+              </div>
+
+              <div class="settings-set" id="sset-access" role="tabpanel" aria-labelledby="stab-access" hidden>
+                <label class="setting"><span class="setting-text"><span class="setting-name">People who can watch at once</span><small>Counting this computer when it shows the phone.</small></span>
+                  <input name="max_viewers" type="number" min="1" max="16"></label>
+                <label class="setting stacked"><span class="setting-text"><span class="setting-name">Fixed AirPlay ports</span><small>Only for strict firewalls. Leave empty to use the defaults.</small></span>
+                  <input name="airplay_ports" placeholder="Example: 7100 or 7100,7000,7001" autocomplete="off"></label>
+              </div>
+
+              <div class="save-bar"><button type="submit" class="btn primary">Save changes</button><span id="settings-msg" class="caption" role="status"></span></div>
+            </form>
+
+            <section class="section settings-extra" data-tab="general" id="appearance">
+              <div class="section-head stacked"><h3>Appearance</h3><p>Saved in this browser only.</p></div>
+              <p class="field-label">Theme</p>
+              <div class="swatches" id="theme-options" role="radiogroup" aria-label="Theme"></div>
+              <p class="field-label">Color</p>
+              <div class="swatches colors" id="color-options" role="radiogroup" aria-label="Color"></div>
+            </section>
+
+            <section class="section settings-extra" data-tab="general" id="app-card" hidden>
+              <div class="section-head stacked"><h3>This computer</h3><p id="app-hint">MirrorDesk runs without a window.</p></div>
+              <label class="setting"><span class="setting-text"><span class="setting-name" id="autostart-label">Start MirrorDesk when I sign in to Windows</span></span>
+                <input type="checkbox" role="switch" class="switch" id="autostart"></label>
+              <p id="app-msg" class="caption" role="status"></p>
+            </section>
+
+            <section class="section settings-extra" data-tab="access">
+              <div class="section-head stacked"><h3>Owner code</h3><p id="owner-code-hint">Full control from your other devices. Keep it to yourself.</p></div>
+              <div class="code-row"><b class="code" id="owner-code">······</b><button class="btn small" id="btn-owner-code">New code</button></div>
+              <label class="setting"><span class="setting-text"><span class="setting-name">Ask for the owner code on this computer too</span><small>Turn this on if other people use this computer.</small></span>
+                <input type="checkbox" role="switch" class="switch" id="require-local"></label>
+            </section>
+          </section>
+
+          <!-- ============================================================ Developer (remove for release) -->
+          <section class="page" id="page-developer" data-title="Developer" hidden>
+            <p class="notice">Testing tools. They will be removed before release.</p>
+            <section class="section">
+              <div class="section-head"><h3>Report a problem</h3></div>
+              <label class="field">What happened?
+                <select id="issue">
+                  <option value="freeze">Picture froze</option>
+                  <option value="audio">Audio problem</option>
+                  <option value="delay">Delay</option>
+                  <option value="sync">Audio and picture out of sync</option>
+                  <option value="disconnect">Disconnected</option>
+                  <option value="viewer_cannot_connect">Viewer cannot connect</option>
+                  <option value="viewer_cannot_see">Viewer cannot see the screen</option>
+                  <option value="no_connection_usb">No connection over USB cable</option>
+                  <option value="no_connection_android">Android phone does not connect</option>
+                  <option value="no_connection_ethernet">No connection over Ethernet</option>
+                  <option value="no_connection_wifi">No connection over Wi-Fi</option>
+                  <option value="no_mirrordesk_option">MirrorDesk missing on the phone</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <div class="actions"><button id="btn-mark" class="btn">Mark issue</button><button id="btn-export" class="btn">Export diagnostics</button></div>
+              <p id="diag-msg" class="caption" role="status"></p>
+              <p class="caption">Diagnostics contain numbers and categories only: no video, audio, names, addresses or codes. Nothing is uploaded.</p>
+            </section>
+            <section class="section">
+              <div class="section-head"><h3>Stream</h3></div>
+              <div class="list">
+                <div class="row"><span class="row-label">Input</span><span class="row-value" id="dev-input">–</span></div>
+                <div class="row"><span class="row-label">Incoming video</span><span class="row-value" id="rx-source">…</span></div>
+                <div class="row"><span class="row-label">Receiver</span><span class="row-value" id="rx-version">…</span></div>
+                <div class="row"><span class="row-label">USB sessions</span><span class="row-value" id="dev-usb">–</span></div>
+                <div class="row"><span class="row-label">Android</span><span class="row-value" id="dev-android">–</span></div>
+              </div>
+            </section>
+            <section class="section">
+              <div class="section-head"><h3>Viewers</h3></div>
+              <div class="table-wrap"><table class="table"><thead><tr><th>ID</th><th>Video</th><th>Codec</th><th>State</th><th>Where</th></tr></thead><tbody id="viewer-rows"></tbody></table></div>
+            </section>
+            <section class="section">
+              <div class="section-head stacked"><h3>Phone discovery check</h3><p>Checks the network adapter, network profile and firewall that wireless discovery depends on. Changes nothing.</p></div>
+              <div class="actions"><button id="btn-check" class="btn">Run check</button></div>
+              <pre id="check-out" class="log" hidden></pre>
+            </section>
+            <details class="section collapsible" id="log-card">
+              <summary>Receiver log</summary>
+              <div class="actions"><button id="btn-log" class="btn">Refresh</button><span class="caption">Kept in memory only. May include device names.</span></div>
+              <pre id="rx-log" class="log"></pre>
+            </details>
+            <details class="section collapsible" id="android-log-card">
+              <summary>Android log</summary>
+              <div class="actions"><button id="btn-android-log" class="btn">Refresh</button><span class="caption">Messages from the phone. Kept in memory only.</span></div>
+              <pre id="android-log" class="log"></pre>
+            </details>
+          </section>
+
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<dialog class="dialog" id="quit-dialog" aria-labelledby="quit-title">
+  <form method="dialog">
+    <h2 id="quit-title">Quit MirrorDesk?</h2>
+    <p>Mirroring stops, viewers are disconnected and this window closes. Start MirrorDesk again from its shortcut.</p>
+    <label class="check"><input type="checkbox" id="quit-dont-ask"><span>Don't ask me again</span></label>
+    <div class="dialog-actions">
+      <button class="btn" value="cancel">Cancel</button>
+      <button class="btn danger" value="quit" id="quit-confirm">Quit</button>
+    </div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="/app/app.js"></script>
+</body>
+</html>

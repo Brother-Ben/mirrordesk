@@ -1,0 +1,36 @@
+UxPlay source code (GPL-3.0-or-later)
+=====================================
+
+UxPlay-d29dfabe102aba137170121077f55390e875310c.tar.gz is the unmodified source of
+UxPlay 1.74 (development) at commit d29dfabe102aba137170121077f55390e875310c, as
+downloaded from https://codeload.github.com/FDH2/UxPlay/tar.gz/d29dfabe102aba137170121077f55390e875310c
+(project: https://github.com/FDH2/UxPlay).
+
+SHA-256: d68b043bb7eaf141b506199f0c3aa4b8dc261b4f063cf8ccc9697f22b8539ce2
+
+MirrorDesk changes four files of it (change "mirrordesk.3", 2026-10-21). The changed files
+are in mirrordesk/ (copied over the extracted source before building) and the change itself
+is mirrordesk.patch (a unified diff against the archive above):
+
+  lib/raop_buffer.c, lib/raop_buffer.h, lib/raop_rtp.c - the AirPlay audio buffer. When the
+  phone paused, seeked or started a new video, it carried on with later audio packets, and
+  UxPlay kept waiting for the packets it skipped until 256 newer ones had queued up behind
+  them (about 2.8 s of sound), then released them all at once: the sound cut out for 1-3 s
+  after every pause or seek. The buffer now follows the phone's FLUSH request at once, and a
+  missing packet is waited for only briefly (8 packets, to give a resend its chance).
+  (mirrordesk.1)
+
+  lib/raop_rtp.c - each FLUSH is also reported on standard output ("MirrorDesk: audio
+  flush"), so MirrorDesk stops the old sound at once and starts the new sound with its full
+  backlog. (mirrordesk.2)
+
+  renderers/video_renderer.c - video forwarded as RTP (-vrtp) carries the phone's own frame
+  time (counted from the stream's first frame) as its timestamp. Without it every frame had
+  the same RTP timestamp, so MirrorDesk could not even out frames that Wi-Fi delivers late
+  and in bursts (the picture stalled for a moment every 15-20 s). (mirrordesk.3)
+
+MirrorDesk's macOS and Linux installers and its Docker image build the AirPlay receiver
+from these files (they check the SHA-256 of the archive first). It is the same commit and
+change as the Windows build, so together they are also the corresponding source for the
+uxplay program in every MirrorDesk package. The license is in licenses/UxPlay-LICENSE.txt
+and inside the archive (LICENSE).

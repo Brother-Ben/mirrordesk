@@ -1,0 +1,399 @@
+<title>MirrorDesk Install Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: one reading column (~70ch) with a jump list; commands sit in full-width terminal strips with copy buttons. */
+  :root {
+    --bg: #f4f6fa; --surface: #ffffff; --ink: #151b27; --muted: #566074; --line: #dce2ec;
+    --accent: #2c64d8; --accent-soft: #e6eefc; --term: #1b2230; --term-ink: #e7ecf5; --term-dim: #8d98ad;
+    --warn: #9a5a00; --warn-soft: #fdf3e2; --ok: #1f7a4d; --no: #a33a3a;
+    --term-btn: #253043; --term-btn-hover: #2f3c54; --term-btn-line: #3a4558;   /* on the terminal strip, dark in both themes */
+    --display: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+    --body: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e121a; --surface: #151b26; --ink: #e5eaf3; --muted: #9ba5b9; --line: #263042;
+      --accent: #84a9ff; --accent-soft: #1b2740; --term: #0a0d13; --term-ink: #e7ecf5; --term-dim: #7d889d;
+      --warn: #f0b660; --warn-soft: #2a2213; --ok: #5fd39a; --no: #ff8a8a; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e121a; --surface: #151b26; --ink: #e5eaf3; --muted: #9ba5b9; --line: #263042;
+    --accent: #84a9ff; --accent-soft: #1b2740; --term: #0a0d13; --term-ink: #e7ecf5; --term-dim: #7d889d;
+    --warn: #f0b660; --warn-soft: #2a2213; --ok: #5fd39a; --no: #ff8a8a; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--body); }
+  .page { max-width: 54rem; margin: 0 auto; padding-block: 2.5rem 4rem;
+          padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.2; text-wrap: balance; margin: 0; }
+  h1 { font-size: 2.3rem; letter-spacing: -0.01em; }
+  h2 { font-size: 1.6rem; }
+  h3 { font-size: 1.12rem; margin-top: 1.6rem; }
+  p, li { max-width: 70ch; }
+  p { margin: 0.6rem 0; }
+  a { color: var(--accent); text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  code { font-family: var(--mono); font-size: 0.86em; background: var(--accent-soft); padding: 0.08em 0.35em; border-radius: 4px; overflow-wrap: anywhere; }
+  .eyebrow { font: 600 0.78rem/1 var(--body); text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 0.7rem; }
+  .lede { font-size: 1.12rem; color: var(--muted); margin-top: 0.8rem; }
+  header.top { display: grid; gap: 0.2rem; padding-bottom: 1.6rem; border-bottom: 1px solid var(--line); }
+  nav.jump { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
+  nav.jump a { text-decoration: none; font-weight: 600; font-size: 0.95rem; padding: 0.3rem 0.75rem; border: 1px solid var(--line);
+               border-radius: 999px; background: var(--surface); color: var(--ink); }
+  nav.jump a:hover { border-color: var(--accent); color: var(--accent); }
+  section { padding-top: 2.6rem; display: grid; gap: 0.2rem; }
+  section > h2 { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; }
+  section > h2 .tag { font: 600 0.8rem/1 var(--mono); color: var(--muted); }
+  .table-wrap { overflow-x: auto; margin: 1rem 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  th { font-weight: 600; color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+  td code { white-space: nowrap; }
+  .yes { color: var(--ok); font-weight: 600; }
+  .no { color: var(--no); font-weight: 600; }
+  .part { color: var(--warn); font-weight: 600; }
+  ol.steps { list-style: none; counter-reset: step; padding: 0; margin: 0.8rem 0; display: grid; gap: 0.8rem; }
+  ol.steps > li { counter-increment: step; display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 0.2rem 0.6rem; max-width: none; }
+  ol.steps > li::before { content: counter(step); font: 700 0.9rem/2rem var(--display); width: 2rem; height: 2rem; text-align: center;
+                          border-radius: 50%; background: var(--accent-soft); color: var(--accent); }
+  ol.steps > li > div { min-width: 0; padding-top: 0.2rem; }
+  ul { padding-left: 1.2rem; margin: 0.5rem 0; }
+  ul li { margin: 0.25rem 0; }
+  .cmd { position: relative; margin: 0.6rem 0; background: var(--term); border-radius: 10px; min-width: 0; }
+  .cmd pre { margin: 0; padding: 0.85rem 4.8rem 0.85rem 1rem; overflow-x: auto; color: var(--term-ink);
+             font: 0.86rem/1.55 var(--mono); white-space: pre; }
+  .cmd pre .c { color: var(--term-dim); }
+  .cmd .label { display: block; padding: 0.55rem 1rem 0; font: 600 0.72rem/1 var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--term-dim); }
+  .copy { position: absolute; top: 0.5rem; right: 0.5rem; font: 600 0.78rem/1 var(--body); padding: 0.45rem 0.7rem; border-radius: 6px;
+          border: 1px solid var(--term-btn-line); background: var(--term-btn); color: var(--term-ink); cursor: pointer; }
+  .copy:hover { background: var(--term-btn-hover); }
+  .note { border-left: 3px solid var(--warn); background: var(--warn-soft); padding: 0.6rem 0.9rem; border-radius: 0 8px 8px 0; margin: 0.8rem 0; }
+  .note p { margin: 0.25rem 0; }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 0.6rem 1.5rem; margin: 0.8rem 0; padding: 0; }
+  .facts div { min-width: 0; }
+  .facts dt { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 600; }
+  .facts dd { margin: 0.1rem 0 0; }
+  details { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 0.6rem 0.9rem; margin: 0.6rem 0; }
+  details > summary { cursor: pointer; font-weight: 600; }
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+  @media (max-width: 520px) { body { font-size: 16px; } h1 { font-size: 1.85rem; } .cmd pre { padding-right: 1rem; padding-top: 2.4rem; } }
+</style>
+
+<main class="page">
+  <header class="top">
+    <p class="eyebrow">MirrorDesk __VERSION__ · tester build</p>
+    <h1>Install guide</h1>
+    <p class="lede">MirrorDesk shows an iPhone, iPad or Android phone's screen and sound in a browser. It runs on one computer (Windows, Mac, Linux, or a server with Docker) and any browser on the same network can watch. Pick the install that matches that computer.</p>
+    <nav class="jump" aria-label="Sections">
+      <a href="#choose">Which install?</a><a href="#windows">Windows</a><a href="#macos">macOS</a><a href="#linux-desktop">Linux desktop</a>
+      <a href="#linux-server">Linux server (SSH)</a><a href="#docker">Docker &amp; Dockge</a><a href="#after">After installing</a><a href="#trouble">Problems</a>
+    </nav>
+  </header>
+
+  <section id="choose">
+    <h2>Which install do I need?</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>MirrorDesk runs on</th><th>Install</th><th>File to use</th></tr></thead>
+        <tbody>
+          <tr><td>A Windows 10 or 11 PC (Intel/AMD)</td><td><a href="#windows">Windows</a></td><td><code>__WINDOWS_FILE__</code></td></tr>
+          <tr><td>A Mac (Apple Silicon: macOS 14+; Intel: macOS 12+)</td><td><a href="#macos">macOS</a></td><td><code>__MACOS_FILE__</code></td></tr>
+          <tr><td>A Linux PC or laptop you sit at (Ubuntu, Debian, Mint, Fedora, Arch …)</td><td><a href="#linux-desktop">Linux desktop</a></td><td><code>__LINUX_FILE__</code></td></tr>
+          <tr><td>A Linux server, mini PC or Raspberry Pi (64-bit) that you reach over SSH</td><td><a href="#linux-server">Linux server</a></td><td><code>__LINUX_FILE__</code></td></tr>
+          <tr><td>A server with Docker or Dockge (ZimaOS, CasaOS, Unraid, TrueNAS SCALE, any Linux)</td><td><a href="#docker">Docker &amp; Dockge</a></td><td><code>__LINUX_FILE__</code> and <code>__COMPOSE_FILE__</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>What works where</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Connection</th><th>Windows</th><th>macOS</th><th>Linux desktop / server</th><th>Docker</th></tr></thead>
+        <tbody>
+          <tr><td>iPhone / iPad, wireless (AirPlay)</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+          <tr><td>iPhone / iPad, USB cable</td><td class="yes">Yes</td><td class="no">No</td><td class="part">Experimental</td><td class="part">Experimental, with <code>--usb</code></td></tr>
+          <tr><td>Android, USB cable</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">With <code>--usb</code></td></tr>
+          <tr><td>Android, Wi-Fi (Android 11+)</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+          <tr><td>Watch on other devices</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The phone and the computer running MirrorDesk must be on the same network for wireless mirroring. A USB cable only works into the computer that runs MirrorDesk.</p>
+  </section>
+
+  <section id="windows">
+    <h2>Windows <span class="tag">__WINDOWS_FILE__</span></h2>
+    <dl class="facts">
+      <div><dt>Needs</dt><dd>Windows 10 or 11, 64-bit Intel/AMD, internet once (about 200 MB)</dd></div>
+      <div><dt>Time</dt><dd>About 5 minutes</dd></div>
+      <div><dt>Installs into</dt><dd>The folder you unzip it to</dd></div>
+    </dl>
+    <ol class="steps">
+      <li><div>Right-click the zip → <b>Extract All…</b> → choose a short folder such as <code>C:\MirrorDesk</code>. Don't run it from inside the zip preview.</div></li>
+      <li><div>In that folder, double-click <b>Setup-MirrorDesk.cmd</b>. If Windows SmartScreen says it protected your PC, click <b>More info → Run anyway</b> (the test build is not code-signed).</div></li>
+      <li><div>When Windows asks <i>"Do you want to allow this app to make changes?"</i>, choose <b>Yes</b>. That adds the firewall rules that let phones reach MirrorDesk.</div></li>
+      <li><div>Your browser opens MirrorDesk. Next time, start it from the <b>MirrorDesk</b> shortcut in the Start menu or on the desktop.</div></li>
+    </ol>
+    <h3>Every day</h3>
+    <ul>
+      <li>MirrorDesk runs without a window. Its icon sits next to the clock (maybe under <b>^</b>): <i>Open MirrorDesk</i>, <i>Start with Windows</i>, <i>Quit MirrorDesk</i>.</li>
+      <li>iPhone by cable: on the Devices page click <b>Install cable driver</b> once and allow the prompt.</li>
+    </ul>
+    <h3>Update</h3>
+    <p>Quit MirrorDesk, extract the new zip into the same folder (replace the files), and run <b>Setup-MirrorDesk.cmd</b> again. Settings and codes are kept.</p>
+    <h3>Uninstall</h3>
+    <p>If you installed the iPhone cable driver, first open Devices → USB cable → <b>restore Apple's driver</b>. Then quit MirrorDesk, double-click <b>Uninstall-MirrorDesk.cmd</b> and delete the folder.</p>
+  </section>
+
+  <section id="macos">
+    <h2>macOS <span class="tag">__MACOS_FILE__</span></h2>
+    <dl class="facts">
+      <div><dt>Needs</dt><dd>Apple Silicon with macOS 14 Sonoma or newer, or Intel with macOS 12 or newer; your Mac password; about 3 GB free</dd></div>
+      <div><dt>Time</dt><dd>10–30 minutes the first time, mostly downloads</dd></div>
+      <div><dt>Installs into</dt><dd><code>~/Library/Application Support/MirrorDesk</code> and <code>~/Applications/MirrorDesk.app</code></dd></div>
+    </dl>
+    <ol class="steps">
+      <li><div>Double-click the zip in Downloads. You get a folder named <b>MirrorDesk</b>.</div></li>
+      <li><div>Open <b>Terminal</b> (press <kbd>⌘ Space</kbd>, type <i>Terminal</i>, press Return) and run:
+        <div class="cmd"><pre>sh ~/Downloads/MirrorDesk/install.sh</pre></div>
+        If the folder is somewhere else, type <code>sh </code> and drag <b>install.sh</b> from Finder into the Terminal window, then press Return.</div></li>
+      <li><div>If a window asks to install the <b>Command Line Tools</b>, click <b>Install</b>, wait until it finishes, then run the same command again.</div></li>
+      <li><div>If the installer offers to install <b>Homebrew</b>, press Return and type your Mac password when asked (the letters don't show while you type). Homebrew provides GStreamer, which MirrorDesk uses for sound.</div></li>
+      <li><div>The installer builds the AirPlay receiver (a few minutes), sets up Python, creates <b>MirrorDesk.app</b> and starts it. Your browser opens MirrorDesk.</div></li>
+      <li><div>If macOS asks <i>"Allow MirrorDesk to find devices on local networks?"</i> or <i>"accept incoming network connections?"</i>, choose <b>Allow</b>. Phones can't connect otherwise.</div></li>
+    </ol>
+    <div class="note">
+      <p><b>Prefer double-clicking?</b> <b>Install MirrorDesk.command</b> in the folder does the same. Because the test build isn't signed, macOS may refuse to open it the first time. On macOS 15 or newer: open System Settings → Privacy &amp; Security, scroll down, click <b>Open Anyway</b>. On macOS 14 and older: right-click the file → <b>Open</b> → <b>Open</b>.</p>
+    </div>
+    <h3>Every day</h3>
+    <ul>
+      <li>Open <b>MirrorDesk</b> from Spotlight or from the Applications folder in your home folder (Finder → Go → Home → Applications).</li>
+      <li>While it runs, its icon is in the Dock. Click it to open the page; right-click → <b>Quit</b> stops MirrorDesk.</li>
+      <li>Settings → <b>Start MirrorDesk when I log in to this Mac</b> starts it at login, without a browser window.</li>
+      <li>On the iPhone, Screen Mirroring may also list your Mac itself (macOS has its own AirPlay Receiver). Choose <b>MirrorDesk Web</b>.</li>
+      <li>iPhone by USB cable doesn't work on a Mac, because macOS keeps the phone for itself. Use wireless, or QuickTime Player's own <i>New Movie Recording</i> on that Mac.</li>
+    </ul>
+    <h3>Update</h3>
+    <p>Unzip the new version and run its <code>install.sh</code> the same way. It replaces the program and keeps your settings and codes.</p>
+    <h3>Uninstall</h3>
+    <p>Double-click <b>Uninstall MirrorDesk.command</b>, or run the following (add <code>--purge</code> to delete the settings too):</p>
+    <div class="cmd"><pre>sh ~/Library/Application\ Support/MirrorDesk/mirrordesk-installer.sh --uninstall</pre></div>
+    <p>Homebrew and its packages stay. Remove them separately if nothing else uses them.</p>
+  </section>
+
+  <section id="linux-desktop">
+    <h2>Linux desktop <span class="tag">__LINUX_FILE__</span></h2>
+    <dl class="facts">
+      <div><dt>Needs</dt><dd>64-bit Linux (Intel/AMD or ARM) with apt (Debian, Ubuntu, Mint, Pop!_OS, Raspberry Pi OS), dnf (Fedora) or pacman (Arch, Manjaro); an account that can use sudo</dd></div>
+      <div><dt>Time</dt><dd>5–15 minutes</dd></div>
+      <div><dt>Installs into</dt><dd><code>~/.local/share/mirrordesk</code> and the app menu</dd></div>
+    </dl>
+    <ol class="steps">
+      <li><div>Extract the zip: double-click it in your file manager and choose <b>Extract</b>, or run <code>unzip __LINUX_FILE__</code>. You get a folder named <b>MirrorDesk</b> with the program (<code>app</code>), <code>install.sh</code> and these guides.</div></li>
+      <li><div>Open a terminal in the folder that contains <b>MirrorDesk</b> (usually Downloads) and run the installer as yourself, without <code>sudo</code>:
+        <div class="cmd"><pre>cd ~/Downloads
+sh MirrorDesk/install.sh</pre></div></div></li>
+      <li><div>Type your password when <code>sudo</code> asks. It's needed for the system packages (GStreamer, build tools), USB access for phones, and firewall rules.</div></li>
+      <li><div>If the installer asks <i>Let usbmuxd share iPhones with MirrorDesk?</i>, answer yes to use an iPhone by cable (only then does an iPhone's internet sharing by cable stop working on this computer).</div></li>
+      <li><div>The installer builds the AirPlay receiver, sets up Python and Google's Android tools, adds <b>MirrorDesk</b> and <b>Quit MirrorDesk</b> to the app menu and opens MirrorDesk in your browser.</div></li>
+    </ol>
+    <p>On a computer with a desktop the installer chooses this mode by itself. To force it, add <code>--desktop</code>.</p>
+    <h3>Every day</h3>
+    <ul>
+      <li>Start <b>MirrorDesk</b> from the app menu. It runs in the background; opening it again just shows the page.</li>
+      <li>Quit: <b>Quit MirrorDesk</b> in the app menu, or <b>Quit</b> at the top right of the page.</li>
+      <li>In a terminal: <code>mirrordesk start</code>, <code>mirrordesk stop</code>, <code>mirrordesk restart</code>, <code>mirrordesk status</code>, <code>mirrordesk log</code> (open a new terminal after installing).</li>
+      <li>Settings → <b>Start MirrorDesk when I log in</b>.</li>
+      <li>If ufw or firewalld is on, the installer allowed MirrorDesk from home networks (10.x, 172.16–31.x, 192.168.x) and Tailscale (100.64.x).</li>
+    </ul>
+    <div class="note"><p><b>Fedora:</b> the iPhone's sound over AirPlay needs the AAC decoder from RPM Fusion. Enable RPM Fusion, install <code>gstreamer1-plugin-libav</code>, then run the installer again. The installer says so when the decoder is missing.</p></div>
+    <h3>Update and uninstall</h3>
+    <p>Update: extract the newer zip and run its <code>install.sh</code> the same way. Uninstall (add <code>--purge</code> to delete the settings too):</p>
+    <div class="cmd"><pre>sh ~/.local/share/mirrordesk/mirrordesk-installer.sh --uninstall</pre></div>
+  </section>
+
+  <section id="linux-server">
+    <h2>Linux server over SSH <span class="tag">one command</span></h2>
+    <p>For a computer without a screen that you reach over SSH: a home server, a mini PC, a Raspberry Pi 4 or 5 with 64-bit Raspberry Pi OS. MirrorDesk then runs all the time as the service <code>mirrordesk</code>, and you use it from browsers on other devices.</p>
+    <dl class="facts">
+      <div><dt>Needs</dt><dd>Same Linux as above, SSH access, a user that can use sudo (or root)</dd></div>
+      <div><dt>Installs into</dt><dd><code>/opt/mirrordesk</code>; settings in <code>/var/lib/mirrordesk</code></dd></div>
+      <div><dt>Runs as</dt><dd>systemd service <code>mirrordesk</code>, user <code>mirrordesk</code></dd></div>
+    </dl>
+    <ol class="steps">
+      <li><div>On your own computer, extract <code>__LINUX_FILE__</code> (Windows: right-click → <b>Extract All…</b>). You get a folder named <b>MirrorDesk</b>.</div></li>
+      <li><div>Open a terminal in the folder that contains <b>MirrorDesk</b>: Terminal on a Mac or Linux, <b>Windows Terminal</b> or <b>PowerShell</b> on Windows.</div></li>
+      <li><div>Run this one line. It copies the folder to the server and runs the installer there. Replace <code>USER@SERVER</code> with your login and the server's address, for example <code>pi@raspberrypi.local</code> or <code>ubuntu@192.168.1.40</code>:
+        <div class="cmd"><span class="label">macOS, Linux, Windows cmd, PowerShell 7</span><pre>scp -r MirrorDesk USER@SERVER:/tmp/ &amp;&amp; ssh -t USER@SERVER sh /tmp/MirrorDesk/install.sh</pre></div>
+        <div class="cmd"><span class="label">Windows PowerShell 5 (the built-in one)</span><pre>scp -r MirrorDesk USER@SERVER:/tmp/; ssh -t USER@SERVER sh /tmp/MirrorDesk/install.sh</pre></div></div></li>
+      <li><div>Type the SSH password (twice: copying, then logging in), then the sudo password when asked. The installer sets up everything and starts the service.</div></li>
+      <li><div>At the end it prints the addresses to open, for example <code>http://192.168.1.40:8765/</code>, and the <b>owner code</b>. Open one in any browser on the network and enter the code. Give people who should only watch the <b>viewer code</b> from the Viewers page.</div></li>
+    </ol>
+    <p>Already logged in on the server? Copy the zip there any way you like, then run <code>unzip __LINUX_FILE__</code> and <code>sh MirrorDesk/install.sh</code> (if <code>unzip</code> is missing: <code>sudo apt install unzip</code>, <code>sudo dnf install unzip</code> or <code>sudo pacman -S unzip</code>). Without a desktop the installer picks the service mode by itself; <code>--server</code> forces it.</p>
+    <h3>Options</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Add</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td><code>--access-code MYCODE123</code></td><td>Fixed viewer code (watch only, 6–32 letters/digits) instead of a random one</td></tr>
+        <tr><td><code>--port 8766</code></td><td>Another web page port (default 8765)</td></tr>
+        <tr><td><code>--docker</code></td><td>Install as a Docker stack instead (see <a href="#docker">Docker &amp; Dockge</a>)</td></tr>
+        <tr><td><code>--yes</code></td><td>Don't ask questions, take the defaults</td></tr>
+        <tr><td><code>--help</code></td><td>List every option</td></tr>
+      </tbody>
+    </table></div>
+    <p>Options go at the end of the command, for example <code>ssh -t USER@SERVER sh /tmp/MirrorDesk/install.sh --access-code MYCODE123</code>.</p>
+    <h3>Manage the service</h3>
+    <div class="cmd"><pre>sudo systemctl status mirrordesk      <span class="c"># running?</span>
+sudo systemctl restart mirrordesk
+sudo journalctl -u mirrordesk -f      <span class="c"># live log, shows the owner and viewer codes at start</span></pre></div>
+    <h3>Update and uninstall</h3>
+    <p>Update: extract the newer zip and run the one-line command again from there. Settings, the codes and paired phones are kept. Uninstall (add <code>--purge</code> to delete the settings and the <code>mirrordesk</code> user too):</p>
+    <div class="cmd"><pre>ssh -t USER@SERVER sudo sh /opt/mirrordesk/mirrordesk-installer.sh --uninstall</pre></div>
+  </section>
+
+  <section id="docker">
+    <h2>Docker &amp; Dockge <span class="tag">__COMPOSE_FILE__</span></h2>
+    <p>Runs MirrorDesk in a container on any 64-bit Linux host with Docker: ZimaOS, CasaOS, Unraid, TrueNAS SCALE, Ubuntu Server and others. It uses the host's network directly (needed for AirPlay), so Docker Desktop on Windows or macOS can't run it.</p>
+    <dl class="facts">
+      <div><dt>Needs</dt><dd>Docker with the compose plugin, or Dockge</dd></div>
+      <div><dt>Time</dt><dd>A few minutes to download the image (B and C); 5–15 minutes when the installer builds it (A)</dd></div>
+      <div><dt>Image</dt><dd><code>__IMAGE__</code>, downloaded from GitHub, or built on the host by the installer</dd></div>
+    </dl>
+    <h3>A. One command (needs SSH access to the host)</h3>
+    <p>The installer builds the image and creates the stack. When Dockge runs on the host, the stack goes into Dockge's stacks folder and shows up in Dockge as <b>mirrordesk</b>. Extract <code>__LINUX_FILE__</code> on your computer, open a terminal in the folder that contains <b>MirrorDesk</b>, and run:</p>
+    <div class="cmd"><pre>scp -r MirrorDesk USER@SERVER:/tmp/ &amp;&amp; ssh -t USER@SERVER sh /tmp/MirrorDesk/install.sh --docker</pre></div>
+    <p>Windows PowerShell 5: use <code>;</code> instead of <code>&amp;&amp;</code>. To also use phones plugged into the server by USB, add <code>--usb</code>. At the end the installer prints the addresses and the owner code.</p>
+    <ul>
+      <li>With Dockge: stack folder <code>&lt;Dockge stacks folder&gt;/mirrordesk</code>; data in its <code>data</code> folder.</li>
+      <li>ZimaOS / CasaOS without Dockge: stack in <code>/DATA/AppData/mirrordesk-stack</code>, data in <code>/DATA/AppData/mirrordesk</code>.</li>
+      <li>Other hosts without Dockge: stack and data in <code>/opt/mirrordesk-docker</code>.</li>
+      <li>If a <code>mirrordesk</code> stack already exists, the installer rebuilds the image and restarts that stack, keeping its compose file and data.</li>
+    </ul>
+    <h3>B. Paste the stack into Dockge (recommended)</h3>
+    <ol class="steps">
+      <li><div>In Dockge click <b>+ Compose</b>, name the stack <code>mirrordesk</code>, and paste the contents of <code>__COMPOSE_FILE__</code> into the editor.</div></li>
+      <li><div>Optional: in the <b>.env</b> box add settings from the table below, then click <b>Deploy</b>. Docker downloads the MirrorDesk image from GitHub by itself.</div></li>
+      <li><div>Open the stack's log: the line <i>Owner code (full control)</i> has your code; <i>Viewer code (watch only)</i> is the one to give to people who should only watch.</div></li>
+    </ol>
+    <h3>C. Plain Docker Compose</h3>
+    <p>Put <code>__COMPOSE_FILE__</code> in a folder as <code>compose.yaml</code> and run:</p>
+    <div class="cmd"><pre>docker compose up -d
+docker compose logs mirrordesk     <span class="c"># owner/viewer codes and addresses</span></pre></div>
+    <h3>Stack settings (.env)</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Setting</th><th>Default</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><code>MIRRORDESK_DATA_DIR</code></td><td><code>./data</code></td><td>Where settings, keys and Android pairings are kept</td></tr>
+        <tr><td><code>MIRRORDESK_PORT</code></td><td><code>8765</code></td><td>Web page port</td></tr>
+        <tr><td><code>MIRRORDESK_ACCESS_CODE</code></td><td>random</td><td>Fixed viewer code (watch only), 6–32 letters/digits</td></tr>
+        <tr><td><code>MIRRORDESK_OWNER_CODE</code></td><td>random</td><td>Fixed owner code (full control), 6–32 letters/digits</td></tr>
+        <tr><td><code>MIRRORDESK_RUN_AS_ROOT</code></td><td><code>0</code></td><td><code>1</code> for phones on USB (also uncomment the USB lines in the compose file)</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Update and remove</h3>
+    <p>Update: in Dockge, change the version at the end of the stack's <code>image:</code> line and click <b>Deploy</b> (B and C), or run the newer package's installer with <code>--docker</code> (A), which rebuilds the image and restarts the stack. Remove: delete the stack in Dockge, or run the following on the host. The stack folder and its data stay until you delete them.</p>
+    <div class="cmd"><pre>sh /tmp/MirrorDesk/install.sh --docker --uninstall</pre></div>
+    <div class="note"><p><b>Firewall on the host?</b> Allow TCP 8765 (web page) and UDP 5353 (AirPlay discovery). In MirrorDesk's Settings → Advanced, set <b>Fixed AirPlay ports</b> to <code>7100</code>, then allow TCP and UDP 7100–7102 too, and UDP 32768–60999 for the video to other devices.</p></div>
+  </section>
+
+  <section id="after">
+    <h2>After installing</h2>
+    <ul>
+      <li><b>On the computer itself:</b> <code>http://127.0.0.1:8765/</code> opens without a code.</li>
+      <li><b>Other devices:</b> on the <b>Viewers</b> page copy the invitation link (or scan its QR code): it signs that device in to watch. Your own devices use the owner code (Settings → Access) for full control.</li>
+      <li><b>iPhone:</b> Control Center → Screen Mirroring → <b>MirrorDesk Web</b>, then the 4-digit AirPlay code shown on the MirrorDesk page (a new one every time MirrorDesk starts).</li>
+      <li><b>Android:</b> USB debugging by cable (Devices page → Android). Wireless debugging is there too, as a last resort.</li>
+      <li><b>Testing and reporting problems:</b> see <code>TESTER-GUIDE.html</code> in the package.</li>
+    </ul>
+    <h3>Network ports</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Port</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td><code>8765</code> TCP</td><td>The MirrorDesk page (change with <code>--port</code>)</td></tr>
+        <tr><td><code>5353</code> UDP</td><td>Phones finding MirrorDesk (mDNS / Bonjour)</td></tr>
+        <tr><td><code>7100–7102</code> TCP + UDP</td><td>AirPlay on Linux installs (Windows, macOS and Docker choose free ports unless set in Settings → Advanced)</td></tr>
+        <tr><td><code>32768–60999</code> UDP</td><td>Video and sound to other browsers (WebRTC)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="trouble">
+    <h2>If something doesn't work</h2>
+    <details>
+      <summary>The installer stopped with an error</summary>
+      <p>Copy everything the terminal or setup window shows (from the first line) and send it to whoever gave you MirrorDesk. Running the installer again is safe: finished steps are skipped.</p>
+    </details>
+    <details>
+      <summary>The iPhone doesn't list "MirrorDesk Web"</summary>
+      <ul>
+        <li>Phone and computer on the same Wi-Fi; no guest network or "client isolation".</li>
+        <li>Windows: the network must be <b>Private</b> (Settings → Network → your network). Run Setup again if you declined the Windows prompt.</li>
+        <li>macOS: System Settings → Privacy &amp; Security → <b>Local Network</b>: turn MirrorDesk on.</li>
+        <li>Linux and Docker: a firewall must allow UDP 5353 and the AirPlay ports (see <a href="#after">ports</a>).</li>
+      </ul>
+    </details>
+    <details>
+      <summary>Another device can't open the page</summary>
+      <ul>
+        <li>Use an address from the Viewers page, including <code>:8765</code>.</li>
+        <li>Linux server: <code>sudo systemctl status mirrordesk</code>. Docker: <code>docker logs mirrordesk</code>.</li>
+        <li>Allow TCP 8765 in the computer's firewall.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>Video works but there is no sound</summary>
+      <ul>
+        <li>iPhone over AirPlay on Fedora: install the AAC decoder from RPM Fusion (see Linux desktop).</li>
+        <li>Android: sound needs Android 11 or newer; on Android 11, unlock the phone before connecting.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>An Android phone on USB is not found (Linux)</summary>
+      <p>Unplug and plug it in again after installing (the USB permission rule applies to new connections), unlock the phone and tap <b>Allow</b> on "Allow USB debugging?".</p>
+    </details>
+    <details>
+      <summary>iPhone by cable on Linux says usbmuxd keeps switching it back</summary>
+      <p>Linux's <code>usbmuxd</code> (its iPhone service) decides the iPhone's USB mode. Run the installer again and answer yes to <i>Let usbmuxd share iPhones with MirrorDesk?</i>, then unplug the phone and plug it in again. Wi-Fi mirroring works without this.</p>
+    </details>
+    <details>
+      <summary>Another device's browser says it blocks the video connection</summary>
+      <p>Its privacy settings turned WebRTC off. Brave: Settings → Privacy and security → <b>WebRTC IP handling policy</b> → Default. Browser extensions that "prevent WebRTC leaks" do the same.</p>
+    </details>
+  </section>
+
+  <footer>
+    <p>MirrorDesk __VERSION__ tester build. © 2026 the MirrorDesk author. All rights reserved; see NOTICE.txt. Third-party parts keep their own licenses (THIRD_PARTY_NOTICES.md); UxPlay is GPL-3.0 and its source is included.</p>
+  </footer>
+</main>
+
+<script>
+  // Copy buttons for every command block; selecting the text is the fallback.
+  document.querySelectorAll('.cmd').forEach(function (box) {
+    var pre = box.querySelector('pre');
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'copy';
+    button.textContent = 'Copy';
+    button.setAttribute('aria-label', 'Copy command');
+    button.addEventListener('click', function () {
+      var text = pre.innerText.replace(/[ \t]+#.*$/gm, '').trim();
+      function done(label) { button.textContent = label; setTimeout(function () { button.textContent = 'Copy'; }, 1600); }
+      function select() {
+        var range = document.createRange();
+        range.selectNodeContents(pre);
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        done('Selected');
+      }
+      try {
+        navigator.clipboard.writeText(text).then(function () { done('Copied'); }, select);
+      } catch (e) { select(); }
+    });
+    box.appendChild(button);
+  });
+</script>

@@ -1,0 +1,34 @@
+# MirrorDesk on ZimaOS as a Dockge stack: in Dockge click "+ Compose", name the stack
+# "mirrordesk", paste this file and click Deploy. Docker downloads the MirrorDesk image from
+# GitHub by itself. A newer MirrorDesk: change the version at the end of the image line and
+# deploy again. (Other Linux hosts: docker/compose.yaml.)
+# Source and newer versions: https://github.com/Brother-Ben/mirrordesk
+# To build the image on the box instead, from a copy of this repository:
+#   cd /DATA/AppData/mirrordesk-src && sh docker/zimaos-install.sh
+# builds mirrordesk:0.13.0, gives it this stack's image name and restarts the stack with it.
+# Settings, codes, receiver key and Android keys stay in /DATA/AppData/mirrordesk.
+# Codes: see this stack's log ("Owner code (full control)" and "Viewer code (watch only)").
+services:
+  mirrordesk:
+    image: ghcr.io/brother-ben/mirrordesk:0.13.0
+    container_name: mirrordesk
+    # Required: AirPlay discovery, WebRTC video and Android Wireless debugging use the
+    # box's real network interfaces.
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      # ZimaOS's own Avahi announces AirPlay (no second mDNS responder in the container).
+      MIRRORDESK_AVAHI: host
+      # MIRRORDESK_ACCESS_CODE: "CHANGE2ME"   # fixed viewer code (watch only) instead of the stored one
+      # MIRRORDESK_OWNER_CODE: "CHANGE3ME"    # fixed owner code (full control)
+      # Phones on USB plugged into this box: uncomment this and the two USB lines below
+      # (the server then runs as root inside the container).
+      # MIRRORDESK_RUN_AS_ROOT: "1"
+    volumes:
+      - /DATA/AppData/mirrordesk:/data
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+      - /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket
+      # - /dev/bus/usb:/dev/bus/usb
+    # device_cgroup_rules:
+    #   - "c 189:* rmw"
+    stop_grace_period: 15s

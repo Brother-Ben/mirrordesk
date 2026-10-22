@@ -1,0 +1,24 @@
+# Settings, codes, keys, pairing records, logs and diagnostics of this computer: never shared.
+.runtime/
+data/
+.diagnostics/
+
+# Made on each computer: Python environment, caches, builds, packages, test output.
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+build/
+dist/
+runtime/
+test-results/
+*.log
+mirrordesk.ico
+
+# Downloaded tools: Google's adb may not be redistributed, uv is fetched by setup.
+tools/platform-tools/
+tools/uv/
+
+# Internal working notes (they record this development setup).
+MirrorDesk-Complete-Continuation-Handoff-*.md
+MirrorDesk-Session-*.md

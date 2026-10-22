@@ -1,0 +1,67 @@
+# MirrorDesk on ZimaOS (x86-64 ZimaBoard/ZimaBlade/ZimaCube; arm64 also builds).
+#
+# 1. Copy this whole MirrorDesk folder to the ZimaOS box, for example with the Files app
+#    or the network share, to  /DATA/AppData/mirrordesk-src
+# 2. Turn on SSH in ZimaOS settings, log in, and run:
+#       cd /DATA/AppData/mirrordesk-src
+#       docker compose -f docker-compose.zimaos.yml up -d --build      # first build: 5-15 minutes
+#       docker compose -f docker-compose.zimaos.yml logs mirrordesk     # owner/viewer codes + addresses
+#    No "docker compose" on your ZimaOS? Use:  sh docker/zimaos-install.sh   (same settings, plain docker)
+# 3. Open http://<zimaos-address>:8765/ in a browser and enter the owner code from the logs.
+#
+# What works from a container: iPhone/iPad over AirPlay, Android over Wi-Fi (Wireless
+# debugging, pair on the Connect page), watching from any browser on the network.
+# Phones on USB plugged into the ZimaOS box need the USB block below.
+#
+# Settings, keys and Android pairing live in /DATA/AppData/mirrordesk (kept across updates).
+# Update: copy the new folder over the old one and run the same "up -d --build" again.
+name: mirrordesk
+services:
+  mirrordesk:
+    build: .
+    image: mirrordesk:0.13.0
+    container_name: mirrordesk
+    # Host networking is required: AirPlay discovery (mDNS), WebRTC video and Android
+    # Wireless debugging must use the box's real network interfaces.
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      MIRRORDESK_PORT: "8765"
+      # Fixed codes (6-32 letters/digits) instead of the random ones in the logs (viewer = watch only):
+      # MIRRORDESK_ACCESS_CODE: "CHANGE2ME"   # viewer code
+      # MIRRORDESK_OWNER_CODE: "CHANGE3ME"    # owner code
+      # ZimaOS runs its own Avahi (it announces ZimaOS.local): UxPlay announces AirPlay
+      # through it rather than a second mDNS responder in the container.
+      MIRRORDESK_AVAHI: "host"
+      # --- Phones on USB (Android with USB debugging, iPhone cable): uncomment this line
+      # --- and the two blocks marked USB below. The server then runs as root inside the
+      # --- container, because new USB device nodes belong to root.
+      # MIRRORDESK_RUN_AS_ROOT: "1"
+    volumes:
+      - /DATA/AppData/mirrordesk:/data
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+      - /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket
+      # USB (1/2): the USB bus, including phones plugged in after start
+      # - /dev/bus/usb:/dev/bus/usb
+    # USB (2/2): allow USB character devices (major 189)
+    # device_cgroup_rules:
+    #   - "c 189:* rmw"
+    stop_grace_period: 15s
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+  main: mirrordesk
+  author: MirrorDesk (self-built)
+  developer: MirrorDesk
+  category: Utilities
+  title:
+    en_us: MirrorDesk
+  tagline:
+    en_us: Phone screen mirroring in any browser
+  description:
+    en_us: Mirror an iPhone, iPad or Android phone (screen and sound) to any browser on your network. AirPlay, Android Wireless debugging, or USB.
+  port_map: "8765"
+  scheme: http
+  index: /

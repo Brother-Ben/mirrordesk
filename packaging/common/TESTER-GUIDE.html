@@ -1,0 +1,142 @@
+<title>MirrorDesk Tester Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+  /* Layout: one reading column; numbered sections follow the order of a test session. */
+  :root {
+    --bg: #f4f6fa; --surface: #ffffff; --ink: #151b27; --muted: #566074; --line: #dce2ec;
+    --accent: #2c64d8; --accent-soft: #e6eefc; --warn: #9a5a00; --warn-soft: #fdf3e2;
+    --display: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+    --body: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #0e121a; --surface: #151b26; --ink: #e5eaf3; --muted: #9ba5b9; --line: #263042;
+      --accent: #84a9ff; --accent-soft: #1b2740; --warn: #f0b660; --warn-soft: #2a2213; color-scheme: dark; }
+  }
+  :root[data-theme="dark"] { --bg: #0e121a; --surface: #151b26; --ink: #e5eaf3; --muted: #9ba5b9; --line: #263042;
+    --accent: #84a9ff; --accent-soft: #1b2740; --warn: #f0b660; --warn-soft: #2a2213; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--body); }
+  .page { max-width: 52rem; margin: 0 auto; padding-block: 2.5rem 4rem;
+          padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.2; text-wrap: balance; margin: 0; }
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.45rem; display: flex; gap: 0.6rem; align-items: baseline; }
+  h3 { font-size: 1.05rem; margin-bottom: 0.3rem; }
+  h2 .n { font-size: 0.95rem; color: var(--accent); }
+  p, li { max-width: 70ch; }
+  p { margin: 0.5rem 0; }
+  ol, ul { padding-left: 1.3rem; margin: 0.5rem 0; }
+  li { margin: 0.25rem 0; }
+  code, kbd { font-family: var(--mono); font-size: 0.86em; background: var(--accent-soft); padding: 0.08em 0.35em; border-radius: 4px; }
+  a { color: var(--accent); }
+  .eyebrow { font: 600 0.78rem/1 var(--body); text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin: 0 0 0.7rem; }
+  .lede { font-size: 1.1rem; color: var(--muted); }
+  header { padding-bottom: 1.4rem; border-bottom: 1px solid var(--line); }
+  section { padding-top: 2.2rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.8rem; margin: 0.8rem 0; }
+  .grid > div { min-width: 0; border: 1px solid var(--line); border-radius: 10px; padding: 0.8rem 1rem; background: var(--surface); }
+  .note { border-left: 3px solid var(--warn); background: var(--warn-soft); padding: 0.6rem 0.9rem; border-radius: 0 8px 8px 0; margin: 0.8rem 0; }
+  .muted { color: var(--muted); }
+  @media (max-width: 520px) { body { font-size: 16px; } h1 { font-size: 1.8rem; } }
+</style>
+
+<main class="page">
+  <header>
+    <p class="eyebrow">MirrorDesk __VERSION__ · tester build</p>
+    <h1>Tester guide</h1>
+    <p class="lede">Thank you for testing MirrorDesk. It shows a phone's screen and sound in a browser on this computer and on other devices of your network. Installing is covered in INSTALL-GUIDE.html; this guide is about using it and reporting what you find.</p>
+  </header>
+
+  <section>
+    <h2><span class="n">1</span>Open MirrorDesk</h2>
+    <ul>
+      <li><b>Windows:</b> the MirrorDesk shortcut (Start menu or desktop). Its icon sits next to the clock.</li>
+      <li><b>Mac:</b> MirrorDesk in the Applications folder of your home folder, or Spotlight. Its icon is in the Dock while it runs.</li>
+      <li><b>Linux desktop:</b> MirrorDesk in the app menu, or <code>mirrordesk start</code> in a terminal.</li>
+      <li><b>Linux server or Docker:</b> it always runs; open the address the installer printed (for example <code>http://192.168.1.40:8765/</code>) and enter the owner code it printed.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="n">2</span>Connect a phone</h2>
+    <p>The <b>Mirror</b> page shows the ways to connect while no phone is connected; the <b>Phones</b> page has the details, on an <i>iPhone or iPad</i> tab and an <i>Android</i> tab.</p>
+    <div class="grid">
+      <div>
+        <h3>iPhone or iPad, Wi-Fi</h3>
+        <ol>
+          <li>Phone and computer on the same network.</li>
+          <li>Control Center → <b>Screen Mirroring</b> → <b>MirrorDesk Web</b>.</li>
+          <li>Type the 4-digit code shown in MirrorDesk. The code stays the same while MirrorDesk runs, so a phone that stops mirroring can come back without it. MirrorDesk makes a new code and forgets every phone when it starts again, when you choose <b>New code</b>, or after 4 hours with no phone connected.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>iPhone or iPad, USB cable</h3>
+        <ol>
+          <li>Plug it in and unlock it.</li>
+          <li>Windows only: Devices page → USB cable → <b>Install cable driver</b> → allow the prompt. Unplug and plug in again.</li>
+          <li>On the phone tap <b>Trust</b> and enter the passcode.</li>
+        </ol>
+        <p class="muted">Not available on a Mac. Linux: when the installer asks to let usbmuxd share iPhones with MirrorDesk, answer yes.</p>
+      </div>
+      <div>
+        <h3>Android, USB cable</h3>
+        <ol>
+          <li>Settings → About phone → tap <b>Build number</b> 7 times.</li>
+          <li>Settings → System → Developer options → <b>USB debugging</b> on.</li>
+          <li>Plug in, tap <b>Allow</b> on the phone (tick "Always allow").</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Android, Wi-Fi (Android 11+) — last resort</h3>
+        <ol>
+          <li>Developer options → <b>Wireless debugging</b> on.</li>
+          <li>Devices page → Android → <b>Wi-Fi (Wireless debugging)</b> → <b>Show QR code</b>.</li>
+          <li>Phone: <b>Pair device with QR code</b> and scan it (or use the pairing code fields).</li>
+        </ol>
+        <p class="muted">Less secure than the cable: turn Wireless debugging off on the phone when you are done.</p>
+      </div>
+    </div>
+    <p>With an Android phone you can also use it from the computer: click and drag on the picture, scroll, type, and use the <b>Back / Home / Apps</b> buttons.</p>
+    <p><b>Disconnect</b> (on the bar under the picture, or at the top of the Devices page) ends the phone's mirroring. A cable phone then waits until you unplug it and plug it in again, or click <b>Reconnect</b>.</p>
+    <p class="note">Windows: the iPhone cable driver replaces Apple's driver for that phone, so iTunes / Apple Devices don't see it afterwards. To undo: Devices page → USB cable → "How cable mirroring works" → <b>restore Apple's driver</b>.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">3</span>What to try</h2>
+    <ul>
+      <li>Each connection type you can (Wi-Fi iPhone, cable iPhone, Android cable).</li>
+      <li>Portrait and landscape, a video or game with sound for 5–10 minutes. Is the sound smooth? Is it in step with the picture?</li>
+      <li>In a video: pause and play, skip forward and back a few times. Does the sound stay in step afterwards?</li>
+      <li>Lock and unlock the phone, unplug and plug the cable in again, switch apps.</li>
+      <li>On the iPhone: Control Center → Screen Mirroring → <b>Stop Mirroring</b>. The page should say so and go back to "Ready to mirror" right away.</li>
+      <li>Watch on another device: <b>Viewers</b> page → <b>Copy</b> the link and send it (or let the other device scan the QR code). Opening it signs that device in to watch only. Try it a few minutes <i>after</i> the phone started mirroring, too.</li>
+      <li>The <b>Details</b> button on the picture shows resolution, frame rate and a <i>sound</i> line (how much audio had to be filled in).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="n">4</span>Report a problem</h2>
+    <ol>
+      <li>Open the <b>Developer</b> page (left side, under <i>Testing</i>).</li>
+      <li>Right after something goes wrong, pick what happened (for example <i>Sound problem</i>) and click <b>Mark issue</b>. Do this every time; the time of each mark helps a lot.</li>
+      <li>At the end click <b>Export diagnostics</b>. A file named <code>MirrorDesk-diagnostics-….zip</code> lands in your Downloads folder.</li>
+      <li>Send that zip with a short note: which computer (Windows, Mac, Linux, Docker), phone model and system version, how it was connected, what you saw and roughly when.</li>
+      <li>If an <b>Android</b> phone would not connect or stopped: also open <b>Android log</b> at the bottom of the Developer page, click <b>Refresh</b>, and paste that text into your message.</li>
+      <li>If installing failed: copy the installer's messages instead (the whole terminal or setup window).</li>
+    </ol>
+    <p class="muted">The diagnostics contain numbers and categories only (frame rates, buffer sizes, states, error categories). No video, no sound, no phone names, no addresses, no codes. Nothing is uploaded automatically; you can open the zip and check before sending.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">5</span>Stop MirrorDesk</h2>
+    <ul>
+      <li>Windows, Mac, Linux desktop: <b>Quit</b> at the bottom left of the page, in the browser on that computer. It asks first (tick <i>Don't ask me again</i> to skip that), then closes MirrorDesk completely, including its window.</li>
+      <li>Windows: icon next to the clock → <b>Quit MirrorDesk</b>. Mac: right-click MirrorDesk in the Dock → <b>Quit</b>.</li>
+      <li>Linux desktop: <b>Quit MirrorDesk</b> in the app menu, or <code>mirrordesk stop</code> in a terminal (<code>mirrordesk start</code> starts it again).</li>
+      <li>Linux server: <code>sudo systemctl stop mirrordesk</code>. Docker: stop the stack in Dockge or <code>docker stop mirrordesk</code>.</li>
+    </ul>
+    <p>Removing MirrorDesk is described for each system in INSTALL-GUIDE.html.</p>
+  </section>
+</main>

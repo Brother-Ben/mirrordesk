@@ -1,0 +1,39 @@
+# MirrorDesk - Docker Compose / Dockge stack for any Linux host (x86-64 or ARM64:
+# Ubuntu, Debian, Raspberry Pi OS 64-bit, Fedora, ZimaOS, CasaOS, Unraid, TrueNAS SCALE ...).
+# Source and newer versions: https://github.com/Brother-Ben/mirrordesk
+#
+# Paste this file into a new Dockge stack named "mirrordesk" and click Deploy (or run
+# `docker compose up -d` next to it): Docker downloads the MirrorDesk image from GitHub by itself.
+# A newer MirrorDesk: change the version at the end of the image line and deploy again.
+# The Linux installer (sh MirrorDesk/install.sh --docker, in the unzipped Linux package) creates
+# the same stack - inside Dockge when Dockge runs on the host - with the image built on the host.
+#
+# Then open http://<host address>:8765/ and enter the owner code shown in this stack's log.
+# Optional settings go in the stack's .env file (Dockge: the ".env" box under the editor):
+#     MIRRORDESK_DATA_DIR=./data        where settings, keys and Android pairing are kept
+#     MIRRORDESK_PORT=8765              web page port
+#     MIRRORDESK_ACCESS_CODE=CHANGE2ME  fixed viewer code (watch only, 6-32 letters/digits) instead of a random one
+#     MIRRORDESK_OWNER_CODE=CHANGE3ME   fixed owner code (full control) instead of a random one
+#     MIRRORDESK_RUN_AS_ROOT=1          needed for phones on USB (see below)
+services:
+  mirrordesk:
+    image: ghcr.io/brother-ben/mirrordesk:0.13.0
+    container_name: mirrordesk
+    # Required: AirPlay discovery, WebRTC video and Android Wireless debugging use the host's
+    # real network interfaces (this is also why Docker Desktop on Windows/macOS cannot run it).
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      MIRRORDESK_PORT: ${MIRRORDESK_PORT:-8765}
+      MIRRORDESK_ACCESS_CODE: ${MIRRORDESK_ACCESS_CODE:-}
+      MIRRORDESK_OWNER_CODE: ${MIRRORDESK_OWNER_CODE:-}
+      MIRRORDESK_RUN_AS_ROOT: ${MIRRORDESK_RUN_AS_ROOT:-0}
+    volumes:
+      - ${MIRRORDESK_DATA_DIR:-./data}:/data
+      # Phones on USB plugged into this host (Android USB debugging, iPhone cable): uncomment
+      # the next line and the two device_cgroup_rules lines, and set MIRRORDESK_RUN_AS_ROOT=1
+      # (USB device nodes belong to root, also the ones that appear when a phone is plugged in).
+      # - /dev/bus/usb:/dev/bus/usb
+    # device_cgroup_rules:
+    #   - "c 189:* rmw"
+    stop_grace_period: 15s

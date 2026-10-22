@@ -1,0 +1,15 @@
+MirrorDesk - tester build
+=========================
+
+Copyright (c) 2026 the MirrorDesk author. All rights reserved.
+
+This pre-release build was given to you personally for testing. You may install and use it on
+your own devices to test it, and send feedback and diagnostics to the person who gave it to you.
+You may not sell, share, publish or redistribute it, or modified copies of it, to anyone else.
+
+Third-party components keep their own licenses; see THIRD_PARTY_NOTICES.md and the licenses
+folder. In particular UxPlay (the AirPlay receiver) is free software under the GNU GPL version 3
+or later: its complete source code is included (third_party/uxplay) and you may use, change and
+share UxPlay itself under the GPL. The restrictions above apply only to MirrorDesk's own code.
+
+MirrorDesk is provided "as is", without warranty of any kind.

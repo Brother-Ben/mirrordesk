@@ -1,0 +1,27 @@
+# MirrorDesk on a Linux host (ZimaOS, Ubuntu, Debian, Raspberry Pi OS ...).
+#   docker compose up -d --build
+#   docker compose logs mirrordesk      # shows the owner and viewer codes and the URLs
+# Host networking is REQUIRED: AirPlay discovery (mDNS) and WebRTC must use the
+# host's real Ethernet / Wi-Fi / USB-tether / tailscale0 interfaces.
+services:
+  mirrordesk:
+    build: .
+    image: mirrordesk:0.13.0
+    container_name: mirrordesk
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      MIRRORDESK_PORT: "8765"
+      # Fixed codes (6-32 letters/digits); default is random, see logs. Viewer code = watch only.
+      # MIRRORDESK_ACCESS_CODE: "CHANGE2ME"   # viewer code
+      # MIRRORDESK_OWNER_CODE: "CHANGE3ME"    # owner code (full control)
+      # Extra hostname browsers may use (reverse proxy / DNS name):
+      # MIRRORDESK_PUBLIC_HOST: "mirrordesk.home.arpa"
+      # USB cable mirroring (experimental, untested in a container): also uncomment
+      # `devices` below and give the container's user access to the phone's USB node.
+      # MIRRORDESK_USB: "0"     # never touch USB devices
+    # devices:
+    #   - /dev/bus/usb:/dev/bus/usb
+    volumes:
+      - ./data:/data
+    stop_grace_period: 15s
