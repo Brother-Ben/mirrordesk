@@ -8,6 +8,12 @@ pairing PIN, quality, appearance, diagnostics and viewing all happen in the brow
 
 Full guide: [`BROWSER-FIRST-GUIDE.md`](BROWSER-FIRST-GUIDE.md).
 
+## Download
+
+Test builds for Windows, macOS and Linux are on the [Releases page](https://github.com/Brother-Ben/mirrordesk/releases/latest):
+download the zip for your computer, extract it and open `INSTALL-GUIDE.html`. For a server with Docker or
+Dockge, see below.
+
 ## Install with Docker (Dockge, ZimaOS, any Linux host)
 
 In Dockge click **+ Compose**, name the stack `mirrordesk`, paste [`docker/compose.yaml`](docker/compose.yaml)

@@ -25,9 +25,12 @@ prototype ZIPs it **does redistribute binaries**:
 
 - **UxPlay** (`uxplay/bin/uxplay.exe`, GPL-3.0-or-later), built by `tools/build_uxplay_bundle.py`
   from <https://github.com/FDH2/UxPlay> commit `d29dfabe102aba137170121077f55390e875310c`
-  (`v1.73.6-52-gd29dfab`), **unmodified source**, MSYS2 UCRT64 gcc, Release, `USE_MDNS=ON`,
-  `USE_DNS_SD=OFF`, only `-ffile-prefix-map` added (removes local paths). That commit is the
-  corresponding source; `uxplay/SOURCES.txt` states it and `uxplay/licenses/UxPlay-LICENSE.txt` is the GPL.
+  (`v1.73.6-52-gd29dfab`) with MirrorDesk's change to its audio and video handling (since 0.11.1; the
+  changed files are in `third_party/uxplay/mirrordesk/`, described in `third_party/uxplay/SOURCE.txt`, and
+  the diff is `third_party/uxplay/mirrordesk.patch`), MSYS2 UCRT64 gcc, Release, `USE_MDNS=ON`,
+  `USE_DNS_SD=OFF`, only `-ffile-prefix-map` added (removes local paths). That commit plus the change is the
+  corresponding source (shipped in every package as `third_party/uxplay`); `uxplay/SOURCES.txt` states it
+  and `uxplay/licenses/UxPlay-LICENSE.txt` is the GPL.
 - **GStreamer, GLib, FFmpeg and their dependencies** (`uxplay/bin/*.dll`, `uxplay/lib/gstreamer-1.0/`):
   unmodified MSYS2 UCRT64 package binaries (LGPL/GPL and others). `uxplay/BUNDLE.json` lists every
   file with its SHA-256 and owning MSYS2 package + version; `uxplay/licenses/` holds each package's
